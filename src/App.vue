@@ -1,32 +1,59 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+        <h1>Portal</h1>
+      </div>
+
+      <v-spacer></v-spacer>
+      <Menu/>
+    </v-app-bar>
+
+    <v-main>
+      <router-view/>
+    </v-main>
+    <ProgressBar/>
+    <SnackBar/>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+<script>
+import Menu from './components/Menu'
+import GoogleMapsApiLoader from 'google-maps-api-loader';
+import {mapActions} from 'vuex'
+import ProgressBar from './components/ProgressBar';
+import SnackBar from './components/SnackBar';
+export default {
+  name: 'App',
+  components:{
+    Menu,
+    ProgressBar,
+    SnackBar
+  },
+  data: () => ({
+    
+  }),
+  mounted() {
+    this.inicializeGoogleMapApi();
+    this.setCleanSnackBar();
+  },
+  methods: {
+    ...mapActions(['setGoogleMapApi', 'setCleanSnackBar']),
+    /**
+     * Save GoogleMapsApiLoader in store
+    */
+    async inicializeGoogleMapApi(){
+        await GoogleMapsApiLoader({
+            apiKey: this.$store.getters.getKeyGoogleMapApi()
+        })
+        .then(async data=>{
+            this.setGoogleMapApi(data);
+        })
+    },
+  },
+};
+</script>
