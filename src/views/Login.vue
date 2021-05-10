@@ -64,8 +64,8 @@ export default {
         return {
             show: false,
             account: {
-                email: 'anabel27@example.com',
-                password: 'password'
+                email: '',
+                password: ''
             },
             rules: {
                 required: value => !!value || 'Required.',
